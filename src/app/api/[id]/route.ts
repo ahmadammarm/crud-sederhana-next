@@ -14,7 +14,7 @@ export async function GET(
             }
         })
         if(!item) {
-            return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+            return NextResponse.json({ error: 'item not found' }, { status: 404 })
         }
         return NextResponse.json(item)
     } catch(error) {
@@ -25,13 +25,13 @@ export async function GET(
 // UPDATE Item
 export async function PUT(
     request: NextRequest,
-    { params }: { params: {id: number} }
+    { params }: { params: {id: string} }
 ) {
     try {
         const body = await request.json()
         const item = await prisma.item.update({
             where: {
-                id: params.id
+                id: parseInt(params.id)
             },
             data: {
                 name: body.name,
@@ -44,7 +44,7 @@ export async function PUT(
     }
 }
 
-// DELETE product
+// DELETE item
 export async function DELETE(
     request: Request,
     { params }: { params: { id: string } }
@@ -55,8 +55,8 @@ export async function DELETE(
           id: parseInt(params.id),
         },
       })
-      return NextResponse.json({ message: 'Product deleted' })
+      return NextResponse.json({ message: 'item deleted' })
     } catch (error) {
-      return NextResponse.json({ error: 'Error deleting product' }, { status: 500 })
+      return NextResponse.json({ error: 'Error deleting item' }, { status: 500 })
     }
   }
