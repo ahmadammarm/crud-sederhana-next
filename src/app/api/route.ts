@@ -28,3 +28,19 @@ export async function POST(request: NextRequest) {
     }
 }
 
+export async function DELETE(
+    request: Request,
+    { params }: { params: { id: string } }
+  ) {
+    try {
+      await prisma.item.delete({
+        where: {
+          id: parseInt(params.id),
+        },
+      })
+      return NextResponse.json({ message: 'item deleted' })
+    } catch (error) {
+      return NextResponse.json({ error: 'Error deleting item' }, { status: 500 })
+    }
+  }
+

@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 
@@ -44,6 +45,14 @@ export default function Page() {
         }
     }
 
+    // DELETE
+    const handleDelete = async (id: number) => {
+        await fetch(`/api/${id}`, {
+            method: "DELETE"
+        })
+        fetchItems()
+    }
+
     useEffect(() => {
         fetchItems()
     }, [])
@@ -52,7 +61,7 @@ export default function Page() {
     return (
         <div className="p-8 bg-white">
           <h1 className="text-2xl font-bold mb-4">item Management</h1>
-          
+
           {/* Add item Form */}
           <form onSubmit={handleSubmit} className="mb-8">
             <div className="flex flex-col gap-4 max-w-md">
@@ -62,19 +71,21 @@ export default function Page() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="border p-2 rounded text-black"
+                required
               />
               <textarea
                 placeholder="Description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 className="border p-2 rounded text-black"
+                required
               />
-              <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+              <Button type="submit" className="text-white p-2 rounded">
                 Add item
-              </button>
+              </Button>
             </div>
           </form>
-    
+
           {/* items List */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-white">
             {items.map((item) => (
@@ -83,12 +94,17 @@ export default function Page() {
                 <Link href={`/${item.id}`}>
                     <p className="text-black">{item.description}</p>
                 </Link>
-                {/* <button
+                <Button
                   onClick={() => handleDelete(item.id)}
                   className="bg-red-500 text-white p-2 rounded mt-2"
                 >
                   Delete
-                </button> */}
+                </Button>
+                <Link href={`/${item.id}`}>
+                    <Button>
+                        Edit
+                    </Button>
+                </Link>
               </div>
             ))}
           </div>
